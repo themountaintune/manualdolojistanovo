@@ -123,20 +123,17 @@ const Header: React.FC = () => {
                 </div>
               </>
             ) : (
-              <div className="flex items-center space-x-4">
-                <Link
-                  to="/login"
-                  className="text-gray-700 hover:text-primary-600 transition-colors"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  className="btn btn-primary btn-sm"
-                >
-                  Sign Up
-                </Link>
-              </div>
+              <button
+                onClick={() => {
+                  const newsletterSection = document.getElementById('newsletter');
+                  if (newsletterSection) {
+                    newsletterSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="btn btn-primary btn-sm"
+              >
+                Подписаться
+              </button>
             )}
           </div>
 
@@ -213,22 +210,18 @@ const Header: React.FC = () => {
                   </button>
                 </>
               ) : (
-                <>
-                  <Link
-                    to="/login"
-                    className="block px-3 py-2 text-gray-700 hover:text-primary-600 transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="block px-3 py-2 text-gray-700 hover:text-primary-600 transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Sign Up
-                  </Link>
-                </>
+                <button
+                  onClick={() => {
+                    const newsletterSection = document.getElementById('newsletter');
+                    if (newsletterSection) {
+                      newsletterSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    setIsMenuOpen(false);
+                  }}
+                  className="block w-full text-left px-3 py-2 text-gray-700 hover:text-primary-600 transition-colors"
+                >
+                  Подписаться
+                </button>
               )}
             </div>
           </div>
