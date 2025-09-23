@@ -33,7 +33,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <>
       {/* Hero Section */}
       <section className="bg-white py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -159,7 +159,7 @@ const HomePage: React.FC = () => {
           )}
         </div>
       </section>
-    </div>
+    </>
   );
 };
 
