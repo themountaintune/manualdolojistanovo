@@ -22,7 +22,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         </div>
       )}
       
-      <div className="card-content flex flex-col h-full">
+      <div className="card-content flex flex-col">
         {/* Categories */}
         {post.categories.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-3">
@@ -58,7 +58,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
 
         {/* Excerpt */}
         {post.excerpt && (
-          <p className="text-gray-600 mb-4 line-clamp-3 flex-grow">
+          <p className="text-gray-600 mb-4 line-clamp-2">
             {post.excerpt}
           </p>
         )}
@@ -84,7 +84,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         )}
 
         {/* Meta Information */}
-        <div className="flex items-center space-x-4 text-sm text-gray-500 mt-auto">
+        <div className="flex items-center space-x-4 text-sm text-gray-500">
           <div className="flex items-center">
             {post.author.avatar ? (
               <img
