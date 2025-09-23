@@ -10,13 +10,14 @@ interface PostCardProps {
 
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
   return (
-    <article className="card hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+    <article className="card hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden">
       {post.featuredImage && (
-        <div className="aspect-video overflow-hidden rounded-t-lg">
+        <div className="aspect-video overflow-hidden">
           <img
             src={post.featuredImage}
             alt={post.title}
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+            loading="lazy"
           />
         </div>
       )}
