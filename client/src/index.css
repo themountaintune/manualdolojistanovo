@@ -59,9 +59,9 @@
     letter-spacing: -0.01em;
   }
   
-  .card {
-    @apply rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow duration-300;
-  }
+      .card {
+        @apply rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow duration-300 h-full flex flex-col;
+      }
   
   .card-header {
     @apply flex flex-col space-y-1.5 p-6;

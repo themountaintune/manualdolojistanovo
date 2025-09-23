@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, User, MessageCircle, Tag } from 'lucide-react';
+import { Calendar, User, Tag } from 'lucide-react';
 import { format } from 'date-fns';
 import type { Post } from '../types';
 
@@ -22,7 +22,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         </div>
       )}
       
-      <div className="card-content">
+      <div className="card-content flex flex-col h-full">
         {/* Categories */}
         {post.categories.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-3">
@@ -58,7 +58,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
 
         {/* Excerpt */}
         {post.excerpt && (
-          <p className="text-gray-600 mb-4 line-clamp-3">
+          <p className="text-gray-600 mb-4 line-clamp-3 flex-grow">
             {post.excerpt}
           </p>
         )}
@@ -84,37 +84,28 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         )}
 
         {/* Meta Information */}
-        <div className="flex items-center justify-between text-sm text-gray-500">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center">
-              {post.author.avatar ? (
-                <img
-                  src={post.author.avatar}
-                  alt={post.author.username}
-                  className="h-5 w-5 rounded-full mr-2"
-                />
-              ) : (
-                <User className="h-4 w-4 mr-2" />
-              )}
-              <span>{post.author.username}</span>
-            </div>
-            <div className="flex items-center">
-              <Calendar className="h-4 w-4 mr-1" />
-              <span>
-                {post.publishedAt 
-                  ? format(new Date(post.publishedAt), 'MMM d, yyyy')
-                  : format(new Date(post.createdAt), 'MMM d, yyyy')
-                }
-              </span>
-            </div>
+        <div className="flex items-center space-x-4 text-sm text-gray-500 mt-auto">
+          <div className="flex items-center">
+            {post.author.avatar ? (
+              <img
+                src={post.author.avatar}
+                alt={post.author.username}
+                className="h-5 w-5 rounded-full mr-2"
+              />
+            ) : (
+              <User className="h-4 w-4 mr-2" />
+            )}
+            <span>{post.author.username}</span>
           </div>
-          
-          {post._count?.comments !== undefined && (
-            <div className="flex items-center">
-              <MessageCircle className="h-4 w-4 mr-1" />
-              <span>{post._count.comments}</span>
-            </div>
-          )}
+          <div className="flex items-center">
+            <Calendar className="h-4 w-4 mr-1" />
+            <span>
+              {post.publishedAt 
+                ? format(new Date(post.publishedAt), 'MMM d, yyyy')
+                : format(new Date(post.createdAt), 'MMM d, yyyy')
+              }
+            </span>
+          </div>
         </div>
       </div>
     </article>
