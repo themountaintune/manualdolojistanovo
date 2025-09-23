@@ -10,7 +10,7 @@ interface PostCardProps {
 
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
   return (
-    <article className="card hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+    <article className="card hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden h-full flex flex-col">
       {post.featuredImage && (
         <div className="aspect-video overflow-hidden">
           <img
@@ -22,7 +22,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         </div>
       )}
       
-      <div className="card-content flex flex-col">
+      <div className="card-content flex flex-col flex-grow">
         {/* Categories */}
         {post.categories.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-3">
@@ -84,7 +84,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         )}
 
         {/* Meta Information */}
-        <div className="flex items-center space-x-4 text-sm text-gray-500">
+        <div className="flex items-center space-x-4 text-sm text-gray-500 mt-auto">
           <div className="flex items-center">
             {post.author.avatar ? (
               <img
