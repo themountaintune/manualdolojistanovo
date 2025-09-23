@@ -13,7 +13,8 @@
     "db:studio": "cd server && npx prisma studio",
     "db:seed": "cd server && npx prisma db seed",
     "install:all": "npm install && cd server && npm install && cd ../client && npm install",
-    "postinstall": "cd server && npx prisma generate && cd ../client && npm install"
+    "postinstall": "cd server && npx prisma generate && cd ../client && npm install",
+    "vercel-build": "npm run build"
   },
   "keywords": ["blog", "react", "nodejs", "postgresql", "prisma"],
   "author": "ManualDolojista",
