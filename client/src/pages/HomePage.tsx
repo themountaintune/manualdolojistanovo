@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { Calendar, User, MessageCircle, Tag, Search } from 'lucide-react';
+import { Calendar, User, MessageCircle, Tag, BookOpen } from 'lucide-react';
 import { format } from 'date-fns';
 import { postsApi, categoriesApi } from '../services/api';
 import PostCard from '../components/PostCard';
@@ -9,14 +9,12 @@ import CategoryCard from '../components/CategoryCard';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const HomePage: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
 
   const { data: postsData, isLoading: postsLoading } = useQuery({
-    queryKey: ['posts', { search: searchTerm, category: selectedCategory }],
+    queryKey: ['posts', { category: selectedCategory }],
     queryFn: () => postsApi.getAll({
       published: true,
-      search: searchTerm || undefined,
       category: selectedCategory || undefined,
       limit: 12
     }),
@@ -27,42 +25,74 @@ const HomePage: React.FC = () => {
     queryFn: () => categoriesApi.getAll(),
   });
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Search is handled by the query key change
-  };
-
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-white py-24">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl md:text-7xl font-light mb-8 text-gray-900" style={{letterSpacing: '-0.02em'}}>
+      <section className="relative bg-gradient-to-br from-gray-50 via-white to-primary-50 py-32 overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-10 w-32 h-32 bg-primary-100 rounded-full opacity-20 blur-xl"></div>
+          <div className="absolute top-40 right-20 w-24 h-24 bg-blue-100 rounded-full opacity-30 blur-lg"></div>
+          <div className="absolute bottom-20 left-1/4 w-16 h-16 bg-purple-100 rounded-full opacity-25 blur-md"></div>
+        </div>
+        
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="mb-8">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-600 rounded-2xl mb-8 shadow-lg">
+              <BookOpen className="h-10 w-10 text-white" />
+            </div>
+          </div>
+          
+          <h1 className="text-6xl md:text-8xl font-light mb-6 text-gray-900" style={{letterSpacing: '-0.03em'}}>
             ManualDolojista
           </h1>
-          <p className="text-xl md:text-2xl mb-12 text-gray-600 font-light max-w-2xl mx-auto" style={{letterSpacing: '-0.01em'}}>
-            Discover stories, insights, and knowledge from our community
+          
+          <p className="text-2xl md:text-3xl mb-8 text-gray-600 font-light max-w-3xl mx-auto leading-relaxed" style={{letterSpacing: '-0.01em'}}>
+            Откройте мир знаний через наши истории и инсайты
           </p>
           
-          {/* Search Bar */}
-          <form onSubmit={handleSearch} className="max-w-xl mx-auto">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <input
-                type="text"
-                placeholder="Search posts..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 rounded-full text-gray-900 bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
-                style={{letterSpacing: '-0.01em'}}
-              />
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+            <div className="flex items-center text-gray-500">
+              <div className="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
+              <span className="text-sm font-medium">Современные технологии</span>
             </div>
-          </form>
+            <div className="flex items-center text-gray-500">
+              <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+              <span className="text-sm font-medium">Практические советы</span>
+            </div>
+            <div className="flex items-center text-gray-500">
+              <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+              <span className="text-sm font-medium">Инновационные идеи</span>
+            </div>
+          </div>
+          
+          <button
+            onClick={() => {
+              const categoriesSection = document.querySelector('[data-section="categories"]');
+              if (categoriesSection) {
+                categoriesSection.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+            className="inline-flex items-center px-8 py-4 bg-primary-600 text-white rounded-full text-lg font-medium hover:bg-primary-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            style={{letterSpacing: '-0.01em'}}
+          >
+            Изучить статьи
+            <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
+        
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+          <div className="w-6 h-10 border-2 border-gray-300 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-gray-400 rounded-full mt-2 animate-bounce"></div>
+          </div>
         </div>
       </section>
 
       {/* Categories Section */}
-      <section className="py-20 bg-gray-50">
+      <section data-section="categories" className="py-20 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-light text-gray-900 mb-4" style={{letterSpacing: '-0.02em'}}>
