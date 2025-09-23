@@ -33,27 +33,28 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary-600 to-primary-800 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Welcome to ManualDolojista Blog
+      <section className="bg-white py-24">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-5xl md:text-7xl font-light mb-8 text-gray-900" style={{letterSpacing: '-0.02em'}}>
+            ManualDolojista
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-primary-100">
-            Discover amazing stories, insights, and knowledge from our community
+          <p className="text-xl md:text-2xl mb-12 text-gray-600 font-light max-w-2xl mx-auto" style={{letterSpacing: '-0.01em'}}>
+            Discover stories, insights, and knowledge from our community
           </p>
           
           {/* Search Bar */}
-          <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
+          <form onSubmit={handleSearch} className="max-w-xl mx-auto">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
               <input
                 type="text"
                 placeholder="Search posts..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-300"
+                className="w-full pl-12 pr-4 py-4 rounded-full text-gray-900 bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                style={{letterSpacing: '-0.01em'}}
               />
             </div>
           </form>
@@ -61,13 +62,13 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Categories Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-light text-gray-900 mb-4" style={{letterSpacing: '-0.02em'}}>
               Explore Categories
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-600 font-light">
               Find content that interests you most
             </p>
           </div>
@@ -90,14 +91,14 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Posts Section */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center mb-12">
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center mb-16">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-light text-gray-900 mb-4" style={{letterSpacing: '-0.02em'}}>
                 Latest Posts
               </h2>
-              <p className="text-lg text-gray-600">
+              <p className="text-lg text-gray-600 font-light">
                 {selectedCategory 
                   ? `Posts in ${categoriesData?.categories.find(c => c.slug === selectedCategory)?.name}`
                   : 'Discover the latest stories and insights'

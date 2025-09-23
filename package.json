@@ -7,13 +7,13 @@
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "cd server && npm run dev",
     "dev:client": "cd client && npm run dev",
-    "build": "cd client && npm run build",
+    "build": "cd client && npm install && npm run build",
     "start": "cd server && npm start",
     "db:migrate": "cd server && npx prisma migrate dev",
     "db:studio": "cd server && npx prisma studio",
     "db:seed": "cd server && npx prisma db seed",
     "install:all": "npm install && cd server && npm install && cd ../client && npm install",
-    "postinstall": "cd server && npx prisma generate"
+    "postinstall": "cd server && npx prisma generate && cd ../client && npm install"
   },
   "keywords": ["blog", "react", "nodejs", "postgresql", "prisma"],
   "author": "ManualDolojista",

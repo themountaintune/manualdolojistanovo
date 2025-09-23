@@ -24,32 +24,37 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-50">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <BookOpen className="h-8 w-8 text-primary-600" />
-            <span className="text-xl font-bold text-gray-900">ManualDolojista</span>
+          <Link to="/" className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
+              <BookOpen className="h-5 w-5 text-white" />
+            </div>
+            <span className="text-xl font-medium text-gray-900" style={{letterSpacing: '-0.02em'}}>ManualDolojista</span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link
               to="/"
-              className="text-gray-700 hover:text-primary-600 transition-colors"
+              className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
+              style={{letterSpacing: '-0.01em'}}
             >
               Home
             </Link>
             <Link
               to="/"
-              className="text-gray-700 hover:text-primary-600 transition-colors"
+              className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
+              style={{letterSpacing: '-0.01em'}}
             >
               Categories
             </Link>
             <Link
               to="/"
-              className="text-gray-700 hover:text-primary-600 transition-colors"
+              className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
+              style={{letterSpacing: '-0.01em'}}
             >
               About
             </Link>

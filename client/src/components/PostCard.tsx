@@ -10,7 +10,7 @@ interface PostCardProps {
 
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
   return (
-    <article className="card hover:shadow-lg transition-shadow duration-300">
+    <article className="card hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
       {post.featuredImage && (
         <div className="aspect-video overflow-hidden rounded-t-lg">
           <img
@@ -46,7 +46,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         )}
 
         {/* Title */}
-        <h3 className="text-xl font-semibold text-gray-900 mb-3 line-clamp-2">
+        <h3 className="text-xl font-medium text-gray-900 mb-3 line-clamp-2" style={{letterSpacing: '-0.02em'}}>
           <Link
             to={`/post/${post.slug}`}
             className="hover:text-primary-600 transition-colors"
