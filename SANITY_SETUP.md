@@ -9,12 +9,20 @@
 
 ## 2. Настройка переменных окружения
 
+### Получение токена Sanity:
+1. Перейдите в [Sanity Management Console](https://sanity.io/manage)
+2. Выберите ваш проект
+3. Перейдите в "API" → "Tokens"
+4. Создайте новый токен с правами "Read"
+5. Скопируйте токен
+
 Создайте файл `.env.local` в папке `client/`:
 
 ```env
 # Sanity CMS Configuration
 NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
 NEXT_PUBLIC_SANITY_DATASET=production
+SANITY_API_READ_TOKEN=your-read-token
 
 # Google Analytics
 REACT_APP_GA_MEASUREMENT_ID=G-XXXXXXXXXX
