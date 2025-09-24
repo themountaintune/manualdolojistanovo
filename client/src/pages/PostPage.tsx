@@ -9,7 +9,6 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { postsApi } from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
-import CommentSection from '../components/CommentSection';
 
 const PostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -201,10 +200,6 @@ const PostPage: React.FC = () => {
           </div>
         )}
 
-        {/* Comments Section */}
-        <div className="mt-12">
-          <CommentSection postId={post.id} />
-        </div>
       </div>
     </div>
   );
