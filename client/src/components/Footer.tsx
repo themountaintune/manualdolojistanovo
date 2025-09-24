@@ -16,8 +16,8 @@ const Footer: React.FC = () => {
               <span className="text-xl font-medium text-gray-900" style={{letterSpacing: '-0.02em'}}>ManualDolojista</span>
             </Link>
             <p className="text-gray-600 mb-6 max-w-md font-light" style={{letterSpacing: '-0.01em'}}>
-              A modern blog platform built with React, Node.js, and PostgreSQL. 
-              Share your thoughts, ideas, and experiences with the world.
+              O guia definitivo para empreendedores online e donos de lojas virtuais no Brasil. 
+              Aprenda, cresça e transforme seu negócio digital.
             </p>
             <div className="flex space-x-4">
               <a
@@ -46,7 +46,7 @@ const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-medium mb-4 text-gray-900" style={{letterSpacing: '-0.02em'}}>Quick Links</h3>
+            <h3 className="text-lg font-medium mb-4 text-gray-900" style={{letterSpacing: '-0.02em'}}>Links Rápidos</h3>
             <ul className="space-y-3">
               <li>
                 <Link
@@ -54,7 +54,7 @@ const Footer: React.FC = () => {
                   className="text-gray-600 hover:text-gray-900 transition-colors font-light"
                   style={{letterSpacing: '-0.01em'}}
                 >
-                  Home
+                  Início
                 </Link>
               </li>
               <li>
@@ -63,7 +63,7 @@ const Footer: React.FC = () => {
                   className="text-gray-600 hover:text-gray-900 transition-colors font-light"
                   style={{letterSpacing: '-0.01em'}}
                 >
-                  Categories
+                  Artigos
                 </Link>
               </li>
               <li>
@@ -72,7 +72,7 @@ const Footer: React.FC = () => {
                   className="text-gray-600 hover:text-gray-900 transition-colors font-light"
                   style={{letterSpacing: '-0.01em'}}
                 >
-                  About
+                  Sobre
                 </Link>
               </li>
               <li>
@@ -81,7 +81,7 @@ const Footer: React.FC = () => {
                   className="text-gray-600 hover:text-gray-900 transition-colors font-light"
                   style={{letterSpacing: '-0.01em'}}
                 >
-                  Contact
+                  Contato
                 </Link>
               </li>
             </ul>
@@ -89,38 +89,38 @@ const Footer: React.FC = () => {
 
           {/* Categories */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Categories</h3>
+            <h3 className="text-lg font-semibold mb-4">Categorias</h3>
             <ul className="space-y-2">
               <li>
                 <Link
-                  to="/?category=technology"
+                  to="/?category=ecommerce"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Technology
+                  E-commerce
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/?category=lifestyle"
+                  to="/?category=marketing"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Lifestyle
+                  Marketing Digital
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/?category=business"
+                  to="/?category=vendas"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Business
+                  Vendas Online
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/?category=design"
+                  to="/?category=negocios"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Design
+                  Negócios
                 </Link>
               </li>
             </ul>
@@ -130,20 +130,20 @@ const Footer: React.FC = () => {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © 2024 ManualDolojista Blog. All rights reserved.
+              © 2024 ManualDolojista. Todos os direitos reservados.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link
                 to="/"
                 className="text-gray-400 hover:text-white text-sm transition-colors"
               >
-                Privacy Policy
+                Política de Privacidade
               </Link>
               <Link
                 to="/"
                 className="text-gray-400 hover:text-white text-sm transition-colors"
               >
-                Terms of Service
+                Termos de Uso
               </Link>
             </div>
           </div>

@@ -212,13 +212,6 @@ const HomePage: React.FC = () => {
             </div>
           )}
 
-          {/* Demo content notice */}
-          <div className="mt-12 text-center">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 text-blue-700 text-sm">
-              <span className="mr-2">🎨</span>
-              Apple-style design demo • Minimalist & elegant
-            </div>
-          </div>
 
           {/* Load More Button */}
           {postsData?.posts.length && postsData.posts.length >= 12 && (
