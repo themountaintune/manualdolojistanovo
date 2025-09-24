@@ -1,9 +1,16 @@
-import { getPosts } from '../lib/queries'
+import { client } from '../lib/sanity'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
 export default async function Home() {
-  const posts = await getPosts()
+  const posts = await client.fetch(`*[_type == "post"]|order(publishedAt desc)[0..9]{
+    title,
+    "slug": slug.current,
+    excerpt,
+    mainImage,
+    publishedAt,
+    "author": author->{name, image}
+  }`)
   
   return (
     <div className="min-h-screen bg-white">
