@@ -42,21 +42,21 @@ const Header: React.FC = () => {
               className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
               style={{letterSpacing: '-0.01em'}}
             >
-              Home
+              Início
             </Link>
             <Link
               to="/"
               className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
               style={{letterSpacing: '-0.01em'}}
             >
-              Categories
+              Artigos
             </Link>
             <Link
               to="/"
               className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
               style={{letterSpacing: '-0.01em'}}
             >
-              About
+              Sobre
             </Link>
           </nav>
 
@@ -132,7 +132,7 @@ const Header: React.FC = () => {
                 }}
                 className="btn btn-primary btn-sm"
               >
-                Подписаться
+                Inscrever-se
               </button>
             )}
           </div>
@@ -157,21 +157,21 @@ const Header: React.FC = () => {
                 className="block px-3 py-2 text-gray-700 hover:text-primary-600 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Home
+                Início
               </Link>
               <Link
                 to="/"
                 className="block px-3 py-2 text-gray-700 hover:text-primary-600 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Categories
+                Artigos
               </Link>
               <Link
                 to="/"
                 className="block px-3 py-2 text-gray-700 hover:text-primary-600 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                About
+                Sobre
               </Link>
               
               {isAuthenticated ? (
@@ -220,7 +220,7 @@ const Header: React.FC = () => {
                   }}
                   className="block w-full text-left px-3 py-2 text-gray-700 hover:text-primary-600 transition-colors"
                 >
-                  Подписаться
+                  Inscrever-se
                 </button>
               )}
             </div>

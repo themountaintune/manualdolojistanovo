@@ -33,21 +33,21 @@ const HomePage: React.FC = () => {
           </h1>
           
           <p className="text-2xl md:text-3xl mb-8 text-gray-600 font-light max-w-3xl mx-auto leading-relaxed" style={{letterSpacing: '-0.01em'}}>
-            Откройте мир знаний через наши истории и инсайты
+            O guia completo para empreendedores online e donos de lojas virtuais
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
             <div className="flex items-center text-gray-500">
               <div className="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
-              <span className="text-sm font-medium">Современные технологии</span>
+              <span className="text-sm font-medium">E-commerce</span>
             </div>
             <div className="flex items-center text-gray-500">
               <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-              <span className="text-sm font-medium">Практические советы</span>
+              <span className="text-sm font-medium">Marketing Digital</span>
             </div>
             <div className="flex items-center text-gray-500">
               <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
-              <span className="text-sm font-medium">Инновационные идеи</span>
+              <span className="text-sm font-medium">Vendas Online</span>
             </div>
           </div>
           
@@ -61,7 +61,7 @@ const HomePage: React.FC = () => {
             className="inline-flex items-center px-8 py-4 bg-primary-600 text-white rounded-full text-lg font-medium hover:bg-primary-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
             style={{letterSpacing: '-0.01em'}}
           >
-            Изучить статьи
+            Explorar Conteúdo
             <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
@@ -81,10 +81,10 @@ const HomePage: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-6" style={{letterSpacing: '-0.02em'}}>
-              Почему ManualDolojista?
+              Por que escolher o ManualDolojista?
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Мы создаем контент, который вдохновляет, обучает и помогает расти
+              Criamos conteúdo que inspira, ensina e ajuda você a crescer no mundo digital
             </p>
           </div>
 
@@ -97,10 +97,10 @@ const HomePage: React.FC = () => {
                 </svg>
               </div>
               <h3 className="text-xl font-medium text-gray-900 mb-4" style={{letterSpacing: '-0.01em'}}>
-                Актуальные темы
+                E-commerce Moderno
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Мы освещаем самые современные технологии, тренды и инновации в мире разработки и дизайна
+                Cobertura das mais modernas plataformas, ferramentas e tendências do comércio eletrônico brasileiro
               </p>
             </div>
 
@@ -112,10 +112,10 @@ const HomePage: React.FC = () => {
                 </svg>
               </div>
               <h3 className="text-xl font-medium text-gray-900 mb-4" style={{letterSpacing: '-0.01em'}}>
-                Практические советы
+                Estratégias Práticas
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Каждая статья содержит реальные примеры кода, пошаговые инструкции и полезные советы
+                Cada artigo contém exemplos reais, instruções passo a passo e dicas práticas para seu negócio
               </p>
             </div>
 
@@ -127,10 +127,10 @@ const HomePage: React.FC = () => {
                 </svg>
               </div>
               <h3 className="text-xl font-medium text-gray-900 mb-4" style={{letterSpacing: '-0.01em'}}>
-                Сообщество экспертов
+                Comunidade de Empreendedores
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Присоединяйтесь к сообществу разработчиков, дизайнеров и технологических энтузиастов
+                Junte-se à comunidade de empreendedores digitais, donos de lojas virtuais e especialistas em vendas online
               </p>
             </div>
           </div>
@@ -139,26 +139,26 @@ const HomePage: React.FC = () => {
           <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="text-3xl md:text-4xl font-light text-gray-900 mb-2" style={{letterSpacing: '-0.02em'}}>
-                50+
+                100+
               </div>
               <div className="text-sm text-gray-500 uppercase tracking-wide">
-                Статей
+                Artigos
               </div>
             </div>
             <div className="text-center">
               <div className="text-3xl md:text-4xl font-light text-gray-900 mb-2" style={{letterSpacing: '-0.02em'}}>
-                10K+
+                25K+
               </div>
               <div className="text-sm text-gray-500 uppercase tracking-wide">
-                Читателей
+                Empreendedores
               </div>
             </div>
             <div className="text-center">
               <div className="text-3xl md:text-4xl font-light text-gray-900 mb-2" style={{letterSpacing: '-0.02em'}}>
-                5+
+                8+
               </div>
               <div className="text-sm text-gray-500 uppercase tracking-wide">
-                Категорий
+                Categorias
               </div>
             </div>
             <div className="text-center">
@@ -166,7 +166,7 @@ const HomePage: React.FC = () => {
                 24/7
               </div>
               <div className="text-sm text-gray-500 uppercase tracking-wide">
-                Обновления
+                Atualizações
               </div>
             </div>
           </div>
@@ -179,10 +179,10 @@ const HomePage: React.FC = () => {
           <div className="flex justify-between items-center mb-16">
             <div>
               <h2 className="text-3xl font-light text-gray-900 mb-4" style={{letterSpacing: '-0.02em'}}>
-                Latest Posts
+                Últimos Artigos
               </h2>
               <p className="text-lg text-gray-600 font-light">
-                Discover the latest stories and insights
+                Descubra as últimas estratégias e insights para seu negócio online
               </p>
             </div>
           </div>

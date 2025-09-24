@@ -11,7 +11,7 @@ const Newsletter: React.FC = () => {
     
     if (!email || !email.includes('@')) {
       setStatus('error');
-      setMessage('Пожалуйста, введите корректный email адрес');
+      setMessage('Por favor, insira um endereço de email válido');
       return;
     }
 
@@ -24,11 +24,11 @@ const Newsletter: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       setStatus('success');
-      setMessage('Спасибо за подписку! Мы отправим вам уведомления о новых статьях.');
+      setMessage('Obrigado pela inscrição! Enviaremos notificações sobre novos artigos.');
       setEmail('');
     } catch (error) {
       setStatus('error');
-      setMessage('Произошла ошибка. Попробуйте еще раз.');
+      setMessage('Ocorreu um erro. Tente novamente.');
     }
   };
 
@@ -37,10 +37,10 @@ const Newsletter: React.FC = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="mb-8">
           <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-4" style={{letterSpacing: '-0.02em'}}>
-            Оставайтесь в курсе
+            Fique por Dentro
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto font-light" style={{letterSpacing: '-0.01em'}}>
-            Подпишитесь на рассылку и получайте уведомления о новых статьях, интересных материалах и обновлениях
+            Inscreva-se na nossa newsletter e receba notificações sobre novos artigos, materiais interessantes e atualizações
           </p>
         </div>
 
@@ -52,7 +52,7 @@ const Newsletter: React.FC = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Ваш email адрес"
+                placeholder="Seu endereço de email"
                 className="w-full pl-12 pr-4 py-4 rounded-full text-gray-900 bg-white border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
                 style={{letterSpacing: '-0.01em'}}
                 disabled={status === 'loading'}
@@ -66,10 +66,10 @@ const Newsletter: React.FC = () => {
               {status === 'loading' ? (
                 <div className="flex items-center space-x-2">
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Подписываемся...</span>
+                  <span>Inscrevendo-se...</span>
                 </div>
               ) : (
-                'Подписаться'
+                'Inscrever-se'
               )}
             </button>
           </div>
@@ -92,7 +92,7 @@ const Newsletter: React.FC = () => {
         </form>
 
         <p className="text-sm text-gray-500 mt-6">
-          Мы уважаем вашу конфиденциальность. Отписаться можно в любой момент.
+          Respeitamos sua privacidade. Você pode cancelar a inscrição a qualquer momento.
         </p>
       </div>
     </section>
