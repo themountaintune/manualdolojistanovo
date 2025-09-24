@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Calendar, User, Tag } from 'lucide-react';
 import { format } from 'date-fns';
 import type { Post } from '../types';
+import OptimizedImage from './OptimizedImage';
 
 interface PostCardProps {
   post: Post;
@@ -14,11 +15,14 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
       {post.featuredImage && (
         <Link to={`/post/${post.slug}`} className="block">
           <div className="aspect-video overflow-hidden">
-            <img
+            <OptimizedImage
               src={post.featuredImage}
               alt={post.title}
               className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
               loading="lazy"
+              width={800}
+              height={450}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           </div>
         </Link>

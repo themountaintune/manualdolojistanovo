@@ -11,6 +11,7 @@ import { postsApi } from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import JsonLd from '../components/JsonLd';
 import Head from '../components/Head';
+import OptimizedImage from '../components/OptimizedImage';
 
 const PostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -106,10 +107,14 @@ const PostPage: React.FC = () => {
         {/* Featured Image */}
         {post.featuredImage && (
           <div className="aspect-video overflow-hidden rounded-lg mb-8">
-            <img
+            <OptimizedImage
               src={post.featuredImage}
               alt={post.title}
               className="w-full h-full object-cover"
+              priority={true}
+              width={1200}
+              height={675}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
             />
           </div>
         )}

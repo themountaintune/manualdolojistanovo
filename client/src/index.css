@@ -7,12 +7,19 @@
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Performance optimizations */
+    text-rendering: optimizeLegibility;
+    -webkit-font-feature-settings: "kern" 1;
+    font-feature-settings: "kern" 1;
   }
   
   body {
     @apply bg-white text-gray-900;
     font-weight: 400;
     letter-spacing: -0.01em;
+    /* Performance optimizations */
+    will-change: auto;
+    contain: layout style;
   }
   
   /* Improved focus styles for accessibility */
@@ -92,9 +99,12 @@
     letter-spacing: -0.01em;
   }
   
-      .card {
-        @apply rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow duration-300;
-      }
+  .card {
+    @apply rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow duration-300;
+    /* Performance optimizations */
+    will-change: transform, box-shadow;
+    contain: layout style paint;
+  }
   
   .card-header {
     @apply flex flex-col space-y-1.5 p-6;
