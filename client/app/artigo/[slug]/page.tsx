@@ -1,5 +1,5 @@
 import { client } from '../../lib/sanity'
-import PortableText from '../../src/components/PortableText'
+import { PortableText } from '@portabletext/react'
 
 export default async function ArticlePage({ params }: { params: { slug: string } }) {
   const post = await client.fetch(`*[_type == "post" && slug.current == $slug][0]{
@@ -14,7 +14,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
       <p>{new Date(post.publishedAt).toLocaleDateString('pt-BR')}</p>
       <div>{post.author?.name}</div>
       <div>
-        {post.body && <PortableText content={post.body} />}
+        {post.body && <PortableText value={post.body} />}
       </div>
     </article>
   )
