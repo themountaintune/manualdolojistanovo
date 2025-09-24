@@ -1,4 +1,5 @@
 import { client } from '../../lib/sanity';
+import { getPosts, getPost, getCategories, getAuthors } from '../../lib/queries';
 import type { SanityPost, SanityCategory, SanityAuthor } from '../types/sanity';
 
 // GROQ queries
@@ -94,7 +95,17 @@ const AUTHORS_QUERY = `
 
 // API functions
 export const sanityApi = {
-  // Get all posts
+  // Get all posts (simple version)
+  async getPostsSimple() {
+    try {
+      return await getPosts();
+    } catch (error) {
+      console.error('Error fetching posts from Sanity:', error);
+      return [];
+    }
+  },
+
+  // Get all posts (detailed version)
   async getPosts(): Promise<SanityPost[]> {
     try {
       const posts = await client.fetch(POSTS_QUERY);
@@ -105,7 +116,17 @@ export const sanityApi = {
     }
   },
 
-  // Get post by slug
+  // Get post by slug (simple version)
+  async getPostSimple(slug: string) {
+    try {
+      return await getPost(slug);
+    } catch (error) {
+      console.error('Error fetching post from Sanity:', error);
+      return null;
+    }
+  },
+
+  // Get post by slug (detailed version)
   async getPostBySlug(slug: string): Promise<SanityPost | null> {
     try {
       const post = await client.fetch(POST_BY_SLUG_QUERY, { slug });
@@ -116,7 +137,17 @@ export const sanityApi = {
     }
   },
 
-  // Get all categories
+  // Get all categories (simple version)
+  async getCategoriesSimple() {
+    try {
+      return await getCategories();
+    } catch (error) {
+      console.error('Error fetching categories from Sanity:', error);
+      return [];
+    }
+  },
+
+  // Get all categories (detailed version)
   async getCategories(): Promise<SanityCategory[]> {
     try {
       const categories = await client.fetch(CATEGORIES_QUERY);
@@ -127,7 +158,17 @@ export const sanityApi = {
     }
   },
 
-  // Get all authors
+  // Get all authors (simple version)
+  async getAuthorsSimple() {
+    try {
+      return await getAuthors();
+    } catch (error) {
+      console.error('Error fetching authors from Sanity:', error);
+      return [];
+    }
+  },
+
+  // Get all authors (detailed version)
   async getAuthors(): Promise<SanityAuthor[]> {
     try {
       const authors = await client.fetch(AUTHORS_QUERY);

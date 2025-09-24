@@ -342,17 +342,34 @@ REACT_APP_SITE_URL=https://manualdolojistanovo.vercel.app
 
 ## 4. Использование в коде
 
-### Получение данных
+### Простые функции выборки
+```typescript
+import { getPosts, getPost, getCategories, getAuthors } from '../lib/queries';
+
+// Получить все статьи (простые данные)
+const posts = await getPosts();
+
+// Получить статью по slug
+const post = await getPost('my-post-slug');
+
+// Получить категории
+const categories = await getCategories();
+
+// Получить авторов
+const authors = await getAuthors();
+```
+
+### Расширенные функции через API
 ```typescript
 import { sanityApi } from '../services/sanity';
 
-// Получить все статьи
+// Получить все статьи (подробные данные)
 const posts = await sanityApi.getPosts();
 
-// Получить статью по slug
+// Получить статью по slug (подробные данные)
 const post = await sanityApi.getPostBySlug('my-post-slug');
 
-// Получить категории
+// Получить категории (подробные данные)
 const categories = await sanityApi.getCategories();
 ```
 
