@@ -86,7 +86,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         )}
 
         {/* Meta Information */}
-        <div className="flex items-center space-x-4 text-sm text-gray-500 mt-auto">
+        <div className="flex items-center justify-between text-sm text-gray-500 mt-auto">
           <div className="flex items-center">
             {post.author.avatar ? (
               <img
