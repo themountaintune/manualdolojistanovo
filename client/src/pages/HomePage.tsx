@@ -3,26 +3,17 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { Calendar, User, MessageCircle, Tag } from 'lucide-react';
 import { format } from 'date-fns';
-import { postsApi, categoriesApi } from '../services/api';
+import { postsApi } from '../services/api';
 import PostCard from '../components/PostCard';
-import CategoryCard from '../components/CategoryCard';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const HomePage: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState('');
-
   const { data: postsData, isLoading: postsLoading } = useQuery({
-    queryKey: ['posts', { category: selectedCategory }],
+    queryKey: ['posts'],
     queryFn: () => postsApi.getAll({
       published: true,
-      category: selectedCategory || undefined,
       limit: 12
     }),
-  });
-
-  const { data: categoriesData, isLoading: categoriesLoading } = useQuery({
-    queryKey: ['categories'],
-    queryFn: () => categoriesApi.getAll(),
   });
 
   return (
@@ -85,32 +76,100 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Categories Section */}
-      <section data-section="categories" className="py-20 bg-gray-50">
+      {/* Features Section */}
+      <section data-section="categories" className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-light text-gray-900 mb-4" style={{letterSpacing: '-0.02em'}}>
-              Explore Categories
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-6" style={{letterSpacing: '-0.02em'}}>
+              Почему ManualDolojista?
             </h2>
-            <p className="text-lg text-gray-600 font-light">
-              Find content that interests you most
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Мы создаем контент, который вдохновляет, обучает и помогает расти
             </p>
           </div>
 
-          {categoriesLoading ? (
-            <LoadingSpinner />
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {categoriesData?.categories.map((category) => (
-                <CategoryCard
-                  key={category.id}
-                  category={category}
-                  onClick={() => setSelectedCategory(selectedCategory === category.slug ? '' : category.slug)}
-                  isSelected={selectedCategory === category.slug}
-                />
-              ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            {/* Feature 1 */}
+            <div className="text-center group">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl mb-6 shadow-lg group-hover:shadow-xl transition-all duration-300">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-medium text-gray-900 mb-4" style={{letterSpacing: '-0.01em'}}>
+                Актуальные темы
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Мы освещаем самые современные технологии, тренды и инновации в мире разработки и дизайна
+              </p>
             </div>
-          )}
+
+            {/* Feature 2 */}
+            <div className="text-center group">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl mb-6 shadow-lg group-hover:shadow-xl transition-all duration-300">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-medium text-gray-900 mb-4" style={{letterSpacing: '-0.01em'}}>
+                Практические советы
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Каждая статья содержит реальные примеры кода, пошаговые инструкции и полезные советы
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="text-center group">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl mb-6 shadow-lg group-hover:shadow-xl transition-all duration-300">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5 5 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-medium text-gray-900 mb-4" style={{letterSpacing: '-0.01em'}}>
+                Сообщество экспертов
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Присоединяйтесь к сообществу разработчиков, дизайнеров и технологических энтузиастов
+              </p>
+            </div>
+          </div>
+
+          {/* Stats Section */}
+          <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-light text-gray-900 mb-2" style={{letterSpacing: '-0.02em'}}>
+                50+
+              </div>
+              <div className="text-sm text-gray-500 uppercase tracking-wide">
+                Статей
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-light text-gray-900 mb-2" style={{letterSpacing: '-0.02em'}}>
+                10K+
+              </div>
+              <div className="text-sm text-gray-500 uppercase tracking-wide">
+                Читателей
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-light text-gray-900 mb-2" style={{letterSpacing: '-0.02em'}}>
+                5+
+              </div>
+              <div className="text-sm text-gray-500 uppercase tracking-wide">
+                Категорий
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-light text-gray-900 mb-2" style={{letterSpacing: '-0.02em'}}>
+                24/7
+              </div>
+              <div className="text-sm text-gray-500 uppercase tracking-wide">
+                Обновления
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -123,21 +182,9 @@ const HomePage: React.FC = () => {
                 Latest Posts
               </h2>
               <p className="text-lg text-gray-600 font-light">
-                {selectedCategory 
-                  ? `Posts in ${categoriesData?.categories.find(c => c.slug === selectedCategory)?.name}`
-                  : 'Discover the latest stories and insights'
-                }
+                Discover the latest stories and insights
               </p>
             </div>
-            
-            {selectedCategory && (
-              <button
-                onClick={() => setSelectedCategory('')}
-                className="btn btn-outline"
-              >
-                Clear Filter
-              </button>
-            )}
           </div>
 
           {postsLoading ? (
