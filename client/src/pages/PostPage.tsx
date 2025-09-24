@@ -9,6 +9,8 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { postsApi } from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
+import JsonLd from '../components/JsonLd';
+import Head from '../components/Head';
 
 const PostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -46,8 +48,51 @@ const PostPage: React.FC = () => {
 
   const { post } = postData;
 
+  // JSON-LD structured data for SEO
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": post.title,
+    "description": post.excerpt || post.content.substring(0, 160),
+    "image": post.featuredImage ? [post.featuredImage] : [],
+    "datePublished": post.publishedAt || post.createdAt,
+    "dateModified": post.updatedAt || post.publishedAt || post.createdAt,
+    "author": {
+      "@type": "Person",
+      "name": post.author.username,
+      "url": `https://manualdolojistanovo.vercel.app/author/${post.author.username}`
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Manual do Lojista",
+      "url": "https://manualdolojistanovo.vercel.app",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://manualdolojistanovo.vercel.app/logo.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://manualdolojistanovo.vercel.app/post/${post.slug}`
+    },
+    "url": `https://manualdolojistanovo.vercel.app/post/${post.slug}`,
+    "articleSection": post.categories.map(cat => cat.category.name).join(", "),
+    "keywords": post.tags.map(tag => tag.tag.name).join(", ")
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Dynamic Meta Tags */}
+      <Head
+        title={`${post.title} | Manual do Lojista`}
+        description={post.excerpt || post.content.substring(0, 160)}
+        image={post.featuredImage || 'https://manualdolojistanovo.vercel.app/og-default.jpg'}
+        url={`https://manualdolojistanovo.vercel.app/post/${post.slug}`}
+        type="article"
+      />
+      
+      {/* JSON-LD Structured Data */}
+      <JsonLd data={jsonLdData} />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
         <Link
