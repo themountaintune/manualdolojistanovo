@@ -16,10 +16,20 @@
     "postinstall": "cd server && npx prisma generate && cd ../client && npm install",
     "vercel-build": "npm run build"
   },
-  "keywords": ["blog", "react", "nodejs", "postgresql", "prisma"],
+  "keywords": [
+    "blog",
+    "react",
+    "nodejs",
+    "postgresql",
+    "prisma"
+  ],
   "author": "ManualDolojista",
   "license": "MIT",
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "@sanity/client": "^7.11.2",
+    "@vercel/node": "^5.3.24"
   }
 }

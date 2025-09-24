@@ -44,3 +44,26 @@ npm run dev
 ├── shared/          # Общие типы и утилиты
 └── docs/           # Документация
 ```
+
+## API /api/ingest (Vercel)
+
+Переменные окружения для Vercel:
+- `SANITY_PROJECT_ID`
+- `SANITY_DATASET`
+- `SANITY_TOKEN`
+- `INGEST_SECRET`
+
+После обновления значений запустите повторный деплой продакшн-окружения.
+
+### Проверка продакшн-эндпоинта
+
+PowerShell
+```powershell
+$json='{"title":"Como escolher plataforma de e-commerce em 2025 (matriz neutra)","excerpt":"plataforma e-commerce, Shopify vs Nuvemshop, custo total","type":"guia","keywords":"plataforma e-commerce; comparativo 2025","siteDomain":"manualdolojista.com"}'
+Invoke-RestMethod -Uri "https://manualdolojista.com/api/ingest" -Method POST -Headers @{ "x-ingest-secret" = "<INGEST_SECRET>" } -ContentType "application/json" -Body $json
+```
+
+curl.exe
+```powershell
+curl.exe -X POST "https://manualdolojista.com/api/ingest" -H "Content-Type: application/json" -H "x-ingest-secret: <INGEST_SECRET>" -d "{\"title\":\"Como escolher plataforma de e-commerce em 2025 (matriz neutra)\",\"excerpt\":\"plataforma e-commerce, Shopify vs Nuvemshop, custo total\",\"type\":\"guia\",\"keywords\":\"plataforma e-commerce; comparativo 2025\",\"siteDomain\":\"manualdolojista.com\"}"
+```
