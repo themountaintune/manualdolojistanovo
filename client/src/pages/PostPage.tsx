@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Calendar, User, MessageCircle, Tag, ArrowLeft } from 'lucide-react';
@@ -12,6 +12,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import JsonLd from '../components/JsonLd';
 import Head from '../components/Head';
 import OptimizedImage from '../components/OptimizedImage';
+import { scrollToTop } from '../utils/scrollToTop';
 
 const PostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -21,6 +22,11 @@ const PostPage: React.FC = () => {
     queryFn: () => postsApi.getBySlug(slug!),
     enabled: !!slug,
   });
+
+  // Scroll to top when component mounts or slug changes
+  useEffect(() => {
+    scrollToTop('instant');
+  }, [slug]);
 
   if (isLoading) {
     return (

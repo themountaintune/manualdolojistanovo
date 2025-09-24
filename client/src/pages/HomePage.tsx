@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { Calendar, User, MessageCircle, Tag } from 'lucide-react';
@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import { postsApi } from '../services/api';
 import PostCard from '../components/PostCard';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { scrollToTop } from '../utils/scrollToTop';
 
 const HomePage: React.FC = () => {
   const { data: postsData, isLoading: postsLoading } = useQuery({
@@ -15,6 +16,11 @@ const HomePage: React.FC = () => {
       limit: 12
     }),
   });
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    scrollToTop('instant');
+  }, []);
 
   return (
     <>
