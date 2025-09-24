@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { Calendar, User, MessageCircle, Tag, BookOpen } from 'lucide-react';
+import { Calendar, User, MessageCircle, Tag } from 'lucide-react';
 import { format } from 'date-fns';
 import { postsApi, categoriesApi } from '../services/api';
 import PostCard from '../components/PostCard';
@@ -37,12 +37,6 @@ const HomePage: React.FC = () => {
         </div>
         
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-600 rounded-2xl mb-8 shadow-lg">
-              <BookOpen className="h-10 w-10 text-white" />
-            </div>
-          </div>
-          
           <h1 className="text-6xl md:text-8xl font-light mb-6 text-gray-900" style={{letterSpacing: '-0.03em'}}>
             ManualDolojista
           </h1>
