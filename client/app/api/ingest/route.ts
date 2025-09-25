@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { nanoid } from 'nanoid'
+import { z } from 'zod'
 import { sanity } from '@/lib/sanity-server'
+
+const PayloadSchema = z.object({
+  title: z.string().min(1, 'title is required'),
+  siteDomain: z.string().min(1, 'siteDomain is required'),
+  slug: z.string().optional(),
+  body: z.array(z.any()).optional(),
+})
 
 const slugify = (value: string) =>
   value
@@ -70,37 +78,37 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const payload = await req.json().catch(() => ({}))
-  const {
-    title,
-    siteDomain,
-    slug: incomingSlug,
-    body: rawBody,
-  } = payload || {}
-
-  if (!title || !siteDomain) {
-    return NextResponse.json({ error: 'title and siteDomain required' }, { status: 400 })
+  const rawPayload = await req.json().catch(() => ({}))
+  const parsed = PayloadSchema.safeParse(rawPayload)
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: 'Invalid payload', issues: parsed.error.issues },
+      { status: 400 }
+    )
   }
 
-  const slugSource = typeof incomingSlug === 'string' && incomingSlug.trim().length > 0 ? incomingSlug : title
-  const slug = slugify(slugSource).slice(0, 96) || nanoid(10)
-  const documentId = `post-${slug}`
-  const body = withKeys(rawBody)
+  const { title, siteDomain, slug: incomingSlug, body: rawBody } = parsed.data
+
+  const slugSource = incomingSlug && incomingSlug.trim().length > 0 ? incomingSlug : title
+  const slugCandidate = slugify(slugSource) || nanoid(10)
+  const sanitizedSlug = slugCandidate.slice(0, 96) || nanoid(10)
+  const documentId = `post-${sanitizedSlug}`
 
   await sanity.createIfNotExists({ _id: documentId, _type: 'post' })
-
-  const setData = {
-    title,
-    siteDomain,
-    slug: { _type: 'slug', current: slug },
-    body,
-  }
 
   const patched = await sanity
     .patch(documentId)
     .unset(UNWANTED_FIELDS)
-    .set(setData)
+    .set({
+      _type: 'post',
+      title,
+      siteDomain,
+      slug: { _type: 'slug', current: sanitizedSlug },
+      body,
+    })
     .commit({ autoGenerateArrayKeys: true })
 
   return NextResponse.json({ ok: true, id: patched._id })
 }
+
+
