@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+﻿import { NextRequest, NextResponse } from 'next/server'
 import { nanoid } from 'nanoid'
 import { z } from 'zod'
 import { sanity } from '@/lib/sanity-server'
@@ -75,17 +75,22 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const { title, siteDomain, slug: incomingSlug, body: rawBody } = parsed.data
+  const { title, slug: incomingSlug, body: rawBody } = parsed.data
 
   const slugSource = incomingSlug && incomingSlug.trim().length > 0 ? incomingSlug : title
   const slugCandidate = slugify(slugSource) || nanoid(10)
-  const sanitizedSlug = slugCandidate.slice(0, 96) || nanoid(10)
-  const documentId = `post-${sanitizedSlug}`
+  const slug = slugCandidate.slice(0, 96) || nanoid(10)
   const body = withKeys(rawBody)
 
-  const doc = {\n    _id: documentId,\n    _type: 'post',\n    title,\n    slug: { _type: 'slug', current: sanitizedSlug },\n    body,\n  }\n
+  const doc = {
+    _id: `post-${slug}`,
+    _type: 'post',
+    title,
+    slug: { _type: 'slug', current: slug },
+    body,
+  }
+
   const created = await sanity.createOrReplace(doc)
 
   return NextResponse.json({ ok: true, id: created._id })
 }
-

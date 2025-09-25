@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+﻿import { NextRequest, NextResponse } from 'next/server'
 import { sanity } from '@/lib/sanity-server'
 
 const UNWANTED_FIELDS = [
@@ -6,7 +6,9 @@ const UNWANTED_FIELDS = [
   'keywords',
   'metaDescription',
   'metaTitle',
-  'siteDomain',\n  'site',\n  'type',
+  'siteDomain',
+  'site',
+  'type',
   'categories',
   'publishedAt',
   'author',
@@ -19,7 +21,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const posts = await sanity.fetch<{ _id: string }[]>(`*[_type=="post"]{_id}`)
+  const posts = await sanity.fetch<{ _id: string }[]>("*[_type=='post']{_id}")
   const results = []
 
   for (const post of posts) {
@@ -33,4 +35,3 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ ok: true, processed: results })
 }
-

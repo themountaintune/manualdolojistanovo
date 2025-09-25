@@ -1,4 +1,4 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
+﻿import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { createClient } from '@sanity/client'
 import { randomUUID } from 'crypto'
 
@@ -90,7 +90,7 @@ const ensureSanityClient = () => {
 
   if (!projectId || !dataset || !token) {
     throw new Error(
-      'Missing Sanity configuration (expected SANITY_PROJECT_ID/NEXT_PUBLIC_SANITY_PROJECT_ID, SANITY_DATASET/NEXT_PUBLIC_SANITY DATASET, SANITY_TOKEN/SANITY_API_READ_TOKEN)'
+      'Missing Sanity configuration (expected SANITY_PROJECT_ID/NEXT_PUBLIC_SANITY_PROJECT_ID, SANITY_DATASET/NEXT_PUBLIC_SANITY_DATASET, SANITY_TOKEN/SANITY_API_READ_TOKEN)'
     )
   }
 
@@ -113,8 +113,18 @@ const parsePayload = (payload: IngestPayload) => {
     throw new Error('title and siteDomain required')
   }
 
-  return { title, siteDomain, slug, body }
+  return { title, slug, body }
 }
+
+const readRawBody = (req: VercelRequest): Promise<string> =>
+  new Promise((resolve, reject) => {
+    let data = ''
+    req.on('data', (chunk) => {
+      data += chunk
+    })
+    req.on('end', () => resolve(data))
+    req.on('error', reject)
+  })
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -128,7 +138,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const missing: string[] = []
   if (!projectId) missing.push('SANITY_PROJECT_ID or NEXT_PUBLIC_SANITY_PROJECT_ID')
-  if (!dataset) missing.push('SANITY_DATASET or NEXT_PUBLIC SANITY_DATASET')
+  if (!dataset) missing.push('SANITY_DATASET or NEXT_PUBLIC_SANITY_DATASET')
   if (!token) missing.push('SANITY_TOKEN or SANITY_API_READ_TOKEN')
   if (!ingestSecret) missing.push('INGEST_SECRET or SANITY_PREVIEW_SECRET')
 
@@ -144,8 +154,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   let payload: IngestPayload
   try {
-    payload = typeof req.body === 'object' && req.body !== null ? (req.body as IngestPayload) : JSON.parse(String(req.body || '{}'))
-  } catch (error) {
+    if (req.body && typeof req.body === 'object') {
+      payload = req.body as IngestPayload
+    } else {
+      const raw = await readRawBody(req)
+      payload = raw ? (JSON.parse(raw) as IngestPayload) : {}
+    }
+  } catch {
     return res.status(400).json({ error: 'Invalid JSON body' })
   }
 
@@ -159,10 +174,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const sanity = ensureSanityClient()
   const slugSource = data.slug && data.slug.length > 0 ? data.slug : data.title
   const slugCandidate = slugify(slugSource) || nanoid(10)
-  const sanitizedSlug = slugCandidate.slice(0, 96) || nanoid(10)
-  const documentId = `post-${sanitizedSlug}`
+  const slug = slugCandidate.slice(0, 96) || nanoid(10)
+  const documentId = `post-${slug}`
 
-  const doc = {\n    _id: documentId,\n    _type: 'post',\n    title: data.title,\n    slug: { _type: 'slug', current: sanitizedSlug },\n    body: data.body,\n  }\n
+  const doc = {
+    _id: documentId,
+    _type: 'post',
+    title: data.title,
+    slug: { _type: 'slug', current: slug },
+    body: data.body,
+  }
+
   try {
     const created = await sanity.createOrReplace(doc)
     return res.status(200).json({ ok: true, id: created._id })
@@ -171,4 +193,3 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: 'Failed to create Sanity document' })
   }
 }
-
