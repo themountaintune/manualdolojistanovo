@@ -6,8 +6,7 @@ const UNWANTED_FIELDS = [
   'keywords',
   'metaDescription',
   'metaTitle',
-  'site',
-  'type',
+  'siteDomain',\n  'site',\n  'type',
   'categories',
   'publishedAt',
   'author',
@@ -34,3 +33,4 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ ok: true, processed: results })
 }
+

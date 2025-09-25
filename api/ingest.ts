@@ -162,15 +162,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const sanitizedSlug = slugCandidate.slice(0, 96) || nanoid(10)
   const documentId = `post-${sanitizedSlug}`
 
-  const doc = {
-    _id: documentId,
-    _type: 'post',
-    title: data.title,
-    siteDomain: data.siteDomain,
-    slug: { _type: 'slug', current: sanitizedSlug },
-    body: data.body,
-  }
-
+  const doc = {\n    _id: documentId,\n    _type: 'post',\n    title: data.title,\n    slug: { _type: 'slug', current: sanitizedSlug },\n    body: data.body,\n  }\n
   try {
     const created = await sanity.createOrReplace(doc)
     return res.status(200).json({ ok: true, id: created._id })
@@ -179,3 +171,4 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: 'Failed to create Sanity document' })
   }
 }
+

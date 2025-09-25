@@ -83,16 +83,9 @@ export async function POST(req: NextRequest) {
   const documentId = `post-${sanitizedSlug}`
   const body = withKeys(rawBody)
 
-  const doc = {
-    _id: documentId,
-    _type: 'post',
-    title,
-    siteDomain,
-    slug: { _type: 'slug', current: sanitizedSlug },
-    body,
-  }
-
+  const doc = {\n    _id: documentId,\n    _type: 'post',\n    title,\n    slug: { _type: 'slug', current: sanitizedSlug },\n    body,\n  }\n
   const created = await sanity.createOrReplace(doc)
 
   return NextResponse.json({ ok: true, id: created._id })
 }
+
