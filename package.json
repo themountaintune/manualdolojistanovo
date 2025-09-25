@@ -30,7 +30,6 @@
   },
   "dependencies": {
     "@sanity/client": "^7.11.2",
-    "@vercel/node": "^5.3.24",
-    "nanoid": "^5.1.6"
+    "@vercel/node": "^5.3.24"
   }
 }

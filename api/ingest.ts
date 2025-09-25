@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { createClient } from '@sanity/client'
-import { nanoid } from 'nanoid'
+import { randomUUID } from 'crypto'
 
 type IngestPayload = {
   title?: string
@@ -12,6 +12,8 @@ type IngestPayload = {
   body?: unknown
   categories?: unknown
 }
+
+const nanoid = (size: number = 21) => randomUUID().replace(/-/g, '').slice(0, size)
 
 const slugify = (value: string) =>
   value
@@ -68,8 +70,9 @@ const ensureCategoryRefs = (rawCategories: unknown): any[] =>
       if (!category) return null
       if (typeof category === 'string') return category
       if (typeof category === 'object') {
-        if (typeof category._ref === 'string') return category._ref
-        if (typeof category.id === 'string') return category.id
+        const ref = category as { _ref?: string; id?: string }
+        if (typeof ref._ref === 'string') return ref._ref
+        if (typeof ref.id === 'string') return ref.id
       }
       return null
     })
@@ -160,7 +163,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!ingestSecret) missing.push('INGEST_SECRET or SANITY_PREVIEW_SECRET')
 
   if (missing.length > 0) {
-    return res.status(500).json({ error: `Missing env vars: ${missing.join(', ')}` })
+    return res.status(500).json({ error: 'Missing env vars: ' + missing.join(', ') })
   }
 
   const secretHeader = req.headers['x-ingest-secret'] ?? req.headers['X-INGEST-SECRET']
@@ -188,8 +191,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const sanity = ensureSanityClient()
-    const siteQuery = `*[_type=="site" && domain==$d][0]{_id}`
-    let site = await sanity.fetch(siteQuery, { d: siteDomain })
+    const siteQuery = '*[_type=="site" && domain==$d][0]{_id}'
+    let site = (await sanity.fetch(siteQuery, { d: siteDomain })) as { _id?: string } | null
 
     if (!site?._id) {
       site = await sanity.create({
@@ -201,16 +204,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const slugSource = typeof payload.slug === 'string' && payload.slug.trim().length > 0 ? payload.slug : title
     const slug = slugify(slugSource).slice(0, 96) || nanoid(10)
-    const documentId = `post-${slug}`
+    const documentId = 'post-' + slug
     const now = new Date().toISOString()
 
     const body = ensureBlockKeys(rawBody)
     const categories = ensureCategoryRefs(rawCategories)
 
-    const existing = await sanity.fetch<{ _id: string; _createdAt?: string }>(
-      `*[_id==$id][0]{_id,_createdAt}`,
+    const existing = (await sanity.fetch(
+      '*[_id==$id][0]{_id,_createdAt}',
       { id: documentId }
-    )
+    )) as { _id?: string; _createdAt?: string } | null
 
     const doc = await sanity.createOrReplace({
       _id: documentId,
@@ -218,7 +221,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       title,
       excerpt,
       slug: { _type: 'slug', current: slug },
-      site: { _type: 'reference', _ref: site._id },
+      site: { _type: 'reference', _ref: site?._id },
       categories,
       author: undefined,
       body,
