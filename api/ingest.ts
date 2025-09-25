@@ -9,13 +9,24 @@ type IngestPayload = {
   siteDomain?: string
 }
 
+function resolveEnv(primary: string, ...fallbacks: string[]) {
+  if (process.env[primary]) return process.env[primary]
+  for (const key of fallbacks) {
+    const value = process.env[key]
+    if (value) return value
+  }
+  return undefined
+}
+
 function ensureSanityClient() {
-  const projectId = process.env.SANITY_PROJECT_ID
-  const dataset = process.env.SANITY_DATASET
-  const token = process.env.SANITY_TOKEN
+  const projectId = resolveEnv('SANITY_PROJECT_ID', 'NEXT_PUBLIC_SANITY_PROJECT_ID')
+  const dataset = resolveEnv('SANITY_DATASET', 'NEXT_PUBLIC_SANITY_DATASET')
+  const token = resolveEnv('SANITY_TOKEN', 'SANITY_API_READ_TOKEN')
 
   if (!projectId || !dataset || !token) {
-    throw new Error('Missing Sanity configuration')
+    throw new Error(
+      'Missing Sanity configuration (expected SANITY_PROJECT_ID/NEXT_PUBLIC_SANITY_PROJECT_ID, SANITY_DATASET/NEXT_PUBLIC_SANITY_DATASET, SANITY_TOKEN/SANITY_API_READ_TOKEN)'
+    )
   }
 
   return createClient({
@@ -24,7 +35,7 @@ function ensureSanityClient() {
     token,
     apiVersion: '2024-01-01',
     useCdn: false,
-  })
+  }) as any
 }
 
 function parsePayload(req: VercelRequest): { payload: IngestPayload; error?: string } {
@@ -52,15 +63,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).end()
   }
 
-  const requiredEnv = ['SANITY_PROJECT_ID', 'SANITY_DATASET', 'SANITY_TOKEN', 'INGEST_SECRET'] as const
-  const missing = requiredEnv.filter((key) => !process.env[key])
+  const missing: string[] = []
+  const projectId = resolveEnv('SANITY_PROJECT_ID', 'NEXT_PUBLIC_SANITY_PROJECT_ID')
+  const dataset = resolveEnv('SANITY_DATASET', 'NEXT_PUBLIC_SANITY_DATASET')
+  const token = resolveEnv('SANITY_TOKEN', 'SANITY_API_READ_TOKEN')
+  const ingestSecret = resolveEnv('INGEST_SECRET', 'SANITY_PREVIEW_SECRET')
+
+  if (!projectId) missing.push('SANITY_PROJECT_ID or NEXT_PUBLIC_SANITY_PROJECT_ID')
+  if (!dataset) missing.push('SANITY_DATASET or NEXT_PUBLIC_SANITY_DATASET')
+  if (!token) missing.push('SANITY_TOKEN or SANITY_API_READ_TOKEN')
+  if (!ingestSecret) missing.push('INGEST_SECRET or SANITY_PREVIEW_SECRET')
+
   if (missing.length > 0) {
     return res.status(500).json({ error: `Missing env vars: ${missing.join(', ')}` })
   }
 
   const secretHeader = req.headers['x-ingest-secret'] ?? req.headers['X-INGEST-SECRET']
   const secret = Array.isArray(secretHeader) ? secretHeader[0] : secretHeader
-  if (!secret || secret !== process.env.INGEST_SECRET) {
+  if (!secret || secret !== ingestSecret) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
@@ -78,7 +98,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const sanity = ensureSanityClient() as any
+    const sanity = ensureSanityClient()
     const siteQuery = `*[_type=="site" && domain==$d][0]{_id}`
     let site = await sanity.fetch(siteQuery, { d: siteDomain })
 
@@ -105,7 +125,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({ ok: true, id: doc._id })
   } catch (err) {
     console.error('Failed to ingest post', err)
-    if (err instanceof Error && err.message === 'Missing Sanity configuration') {
+    if (err instanceof Error) {
       return res.status(500).json({ error: err.message })
     }
     return res.status(500).json({ error: 'Failed to create Sanity document' })
