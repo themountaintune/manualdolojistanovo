@@ -59,18 +59,6 @@ const withKeys = (rawBlocks: unknown): any[] => {
   })
 }
 
-const UNWANTED_FIELDS = [
-  'excerpt',
-  'keywords',
-  'metaDescription',
-  'metaTitle',
-  'site',
-  'type',
-  'categories',
-  'publishedAt',
-  'author',
-]
-
 export async function POST(req: NextRequest) {
   const ingestSecret = process.env.INGEST_SECRET ?? process.env.SANITY_PREVIEW_SECRET ?? ''
   const secret = req.headers.get('x-ingest-secret') || ''
@@ -93,22 +81,18 @@ export async function POST(req: NextRequest) {
   const slugCandidate = slugify(slugSource) || nanoid(10)
   const sanitizedSlug = slugCandidate.slice(0, 96) || nanoid(10)
   const documentId = `post-${sanitizedSlug}`
+  const body = withKeys(rawBody)
 
-  await sanity.createIfNotExists({ _id: documentId, _type: 'post' })
+  const doc = {
+    _id: documentId,
+    _type: 'post',
+    title,
+    siteDomain,
+    slug: { _type: 'slug', current: sanitizedSlug },
+    body,
+  }
 
-  const patched = await sanity
-    .patch(documentId)
-    .unset(UNWANTED_FIELDS)
-    .set({
-      _type: 'post',
-      title,
-      siteDomain,
-      slug: { _type: 'slug', current: sanitizedSlug },
-      body,
-    })
-    .commit({ autoGenerateArrayKeys: true })
+  const created = await sanity.createOrReplace(doc)
 
-  return NextResponse.json({ ok: true, id: patched._id })
+  return NextResponse.json({ ok: true, id: created._id })
 }
-
-
