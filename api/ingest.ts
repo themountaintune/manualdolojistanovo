@@ -78,19 +78,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const sanity = ensureSanityClient()
+    const sanity = ensureSanityClient() as any
     const siteQuery = `*[_type=="site" && domain==$d][0]{_id}`
-    let site = await sanity.fetch<{ _id: string } | null>(siteQuery, { d: siteDomain })
+    let site = await sanity.fetch(siteQuery, { d: siteDomain })
 
     if (!site?._id) {
-      site = await sanity.create<{ _id: string }>({
+      site = await sanity.create({
         _type: 'site',
         title: siteDomain,
         domain: siteDomain,
       })
     }
 
-    const doc = await sanity.create<{ _id: string }>({
+    const doc = await sanity.create({
       _type: 'post',
       title,
       excerpt,
