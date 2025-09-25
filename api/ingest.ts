@@ -9,13 +9,23 @@ type IngestPayload = {
   siteDomain?: string
 }
 
-const sanity = createClient({
-  projectId: process.env.SANITY_PROJECT_ID!,
-  dataset: process.env.SANITY_DATASET!,
-  token: process.env.SANITY_TOKEN!,
-  apiVersion: '2024-01-01',
-  useCdn: false,
-})
+function ensureSanityClient() {
+  const projectId = process.env.SANITY_PROJECT_ID
+  const dataset = process.env.SANITY_DATASET
+  const token = process.env.SANITY_TOKEN
+
+  if (!projectId || !dataset || !token) {
+    throw new Error('Missing Sanity configuration')
+  }
+
+  return createClient({
+    projectId,
+    dataset,
+    token,
+    apiVersion: '2024-01-01',
+    useCdn: false,
+  })
+}
 
 function parsePayload(req: VercelRequest): { payload: IngestPayload; error?: string } {
   if (!req.body) {
@@ -68,6 +78,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    const sanity = ensureSanityClient()
     const siteQuery = `*[_type=="site" && domain==$d][0]{_id}`
     let site = await sanity.fetch<{ _id: string } | null>(siteQuery, { d: siteDomain })
 
@@ -94,6 +105,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({ ok: true, id: doc._id })
   } catch (err) {
     console.error('Failed to ingest post', err)
+    if (err instanceof Error && err.message === 'Missing Sanity configuration') {
+      return res.status(500).json({ error: err.message })
+    }
     return res.status(500).json({ error: 'Failed to create Sanity document' })
   }
 }
