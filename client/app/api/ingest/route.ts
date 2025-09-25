@@ -22,6 +22,7 @@ const ensureBlockKeys = (rawBlocks: unknown): any[] => {
         _type: 'block',
         style: 'normal',
         _key: nanoid(),
+        markDefs: [],
         children: [
           {
             _type: 'span',
@@ -37,11 +38,13 @@ const ensureBlockKeys = (rawBlocks: unknown): any[] => {
   return blocks.map((block) => {
     const children = toArray<any>(block?.children).map((child) => ({
       ...child,
+      marks: Array.isArray(child?.marks) ? child.marks : [],
       _key: typeof child?._key === 'string' && child._key.trim() ? child._key : nanoid(),
     }))
 
     return {
       ...block,
+      markDefs: Array.isArray(block?.markDefs) ? block.markDefs : [],
       _key: typeof block?._key === 'string' && block._key.trim() ? block._key : nanoid(),
       children,
     }
@@ -110,7 +113,12 @@ export async function POST(req: NextRequest) {
     ? keywords.split(',').map((val) => val.trim()).filter(Boolean)
     : []
 
-  const doc = await sanity.createIfNotExists({
+  const existing = await sanity.fetch<{ _id: string; _createdAt?: string }>(
+    `*[_id==$id][0]{_id,_createdAt}`,
+    { id: documentId }
+  )
+
+  const doc = await sanity.createOrReplace({
     _id: documentId,
     _type: 'post',
     title,
@@ -125,7 +133,7 @@ export async function POST(req: NextRequest) {
     publishedAt: null,
     metaTitle: title.slice(0, 60),
     metaDescription: (excerpt || '').slice(0, 160),
-    _createdAt: now,
+    _createdAt: existing?._createdAt || now,
   })
 
   return NextResponse.json({ ok: true, id: doc._id })
