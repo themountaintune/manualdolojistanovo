@@ -22,6 +22,7 @@ type IngestPayload = {
   siteDomain?: unknown
   slug?: unknown
   body?: unknown
+  publish?: unknown
 }
 
 const nanoid = (size: number = 21) => randomUUID().replace(/-/g, '').slice(0, size)
@@ -107,13 +108,14 @@ const parsePayload = (payload: IngestPayload) => {
   const title = typeof payload.title === 'string' ? payload.title.trim() : ''
   const siteDomain = typeof payload.siteDomain === 'string' ? payload.siteDomain.trim() : ''
   const slug = typeof payload.slug === 'string' ? payload.slug.trim() : undefined
+  const publish = typeof payload.publish === 'boolean' ? payload.publish : false
   const body = withKeys(payload.body)
 
   if (!title || !siteDomain) {
     throw new Error('title and siteDomain required')
   }
 
-  return { title, slug, body }
+  return { title, slug, body, publish }
 }
 
 const readRawBody = (req: VercelRequest): Promise<string> =>
@@ -132,13 +134,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const projectId = resolveEnv('SANITY_PROJECT_ID', 'NEXT_PUBLIC_SANITY_PROJECT_ID')
-  const dataset = resolveEnv('SANITY_DATASET', 'NEXT_PUBLIC_SANITY_DATASET')
+  const dataset = resolveEnv('SANITY_DATASET', 'NEXT_PUBLIC SANITY_DATASET')
   const token = resolveEnv('SANITY_TOKEN', 'SANITY_API_READ_TOKEN')
   const ingestSecret = resolveEnv('INGEST_SECRET', 'SANITY_PREVIEW_SECRET')
 
   const missing: string[] = []
-  if (!projectId) missing.push('SANITY_PROJECT_ID or NEXT_PUBLIC_SANITY_PROJECT_ID')
-  if (!dataset) missing.push('SANITY_DATASET or NEXT_PUBLIC_SANITY_DATASET')
+  if (!projectId) missing.push('SANITY_PROJECT_ID or NEXT_PUBLIC SANITY_PROJECT_ID')
+  if (!dataset) missing.push('SANITY_DATASET or NEXT_PUBLIC SANITY_DATASET')
   if (!token) missing.push('SANITY_TOKEN or SANITY_API_READ_TOKEN')
   if (!ingestSecret) missing.push('INGEST_SECRET or SANITY_PREVIEW_SECRET')
 
@@ -175,21 +177,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const slugSource = data.slug && data.slug.length > 0 ? data.slug : data.title
   const slugCandidate = slugify(slugSource) || nanoid(10)
   const slug = slugCandidate.slice(0, 96) || nanoid(10)
-  const documentId = `post-${slug}`
+  const baseId = `post-${slug}`
+  const draftId = `drafts.${baseId}`
 
-  const doc = {
-    _id: documentId,
+  const [existingDraft, existingPublished] = await sanity.getDocuments([draftId, baseId])
+  const mode = existingDraft || existingPublished ? 'updated' : 'created'
+
+  const draftDoc = {
+    _id: draftId,
     _type: 'post',
     title: data.title,
     slug: { _type: 'slug', current: slug },
     body: data.body,
   }
 
-  try {
-    const created = await sanity.createOrReplace(doc)
-    return res.status(200).json({ ok: true, id: created._id })
-  } catch (error) {
-    console.error('Failed to ingest post', error)
-    return res.status(500).json({ error: 'Failed to create Sanity document' })
+  await sanity.createOrReplace(draftDoc)
+
+  let published = false
+
+  if (data.publish) {
+    const freshDraft = await sanity.getDocument(draftId)
+    if (freshDraft) {
+      const { _id, _rev, ...rest } = freshDraft as Record<string, unknown>
+      await sanity.createOrReplace({ _id: baseId, _type: 'post', ...rest })
+      published = true
+    }
   }
+
+  return res.status(200).json({ ok: true, id: draftId, mode, published })
 }

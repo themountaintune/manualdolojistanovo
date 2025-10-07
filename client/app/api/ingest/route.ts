@@ -8,6 +8,7 @@ const PayloadSchema = z.object({
   siteDomain: z.string().min(1, 'siteDomain is required'),
   slug: z.string().optional(),
   body: z.array(z.any()).optional(),
+  publish: z.boolean().optional(),
 })
 
 const slugify = (value: string) =>
@@ -75,22 +76,39 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const { title, slug: incomingSlug, body: rawBody } = parsed.data
+  const { title, slug: incomingSlug, body: rawBody, publish } = parsed.data
 
   const slugSource = incomingSlug && incomingSlug.trim().length > 0 ? incomingSlug : title
   const slugCandidate = slugify(slugSource) || nanoid(10)
   const slug = slugCandidate.slice(0, 96) || nanoid(10)
   const body = withKeys(rawBody)
 
-  const doc = {
-    _id: `post-${slug}`,
+  const baseId = `post-${slug}`
+  const draftId = `drafts.${baseId}`
+
+  const [existingDraft, existingPublished] = await sanity.getDocuments([draftId, baseId])
+  const mode = existingDraft || existingPublished ? 'updated' : 'created'
+
+  const draftDoc = {
+    _id: draftId,
     _type: 'post',
     title,
     slug: { _type: 'slug', current: slug },
     body,
   }
 
-  const created = await sanity.createOrReplace(doc)
+  await sanity.createOrReplace(draftDoc)
 
-  return NextResponse.json({ ok: true, id: created._id })
+  let published = false
+
+  if (publish) {
+    const freshDraft = await sanity.getDocument(draftId)
+    if (freshDraft) {
+      const { _id, _rev, ...rest } = freshDraft as Record<string, unknown>
+      await sanity.createOrReplace({ _id: baseId, _type: 'post', ...rest })
+      published = true
+    }
+  }
+
+  return NextResponse.json({ ok: true, id: draftId, mode, published })
 }
