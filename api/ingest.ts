@@ -1,4 +1,4 @@
-﻿import type { VercelRequest, VercelResponse } from '@vercel/node'
+import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { createClient } from '@sanity/client'
 import { randomUUID } from 'crypto'
 
@@ -134,13 +134,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const projectId = resolveEnv('SANITY_PROJECT_ID', 'NEXT_PUBLIC_SANITY_PROJECT_ID')
-  const dataset = resolveEnv('SANITY_DATASET', 'NEXT_PUBLIC SANITY_DATASET')
+  const dataset = resolveEnv('SANITY_DATASET', 'NEXT_PUBLIC_SANITY_DATASET')
   const token = resolveEnv('SANITY_TOKEN', 'SANITY_API_READ_TOKEN')
   const ingestSecret = resolveEnv('INGEST_SECRET', 'SANITY_PREVIEW_SECRET')
 
   const missing: string[] = []
-  if (!projectId) missing.push('SANITY_PROJECT_ID or NEXT_PUBLIC SANITY_PROJECT_ID')
-  if (!dataset) missing.push('SANITY_DATASET or NEXT_PUBLIC SANITY_DATASET')
+  if (!projectId) missing.push('SANITY_PROJECT_ID or NEXT_PUBLIC_SANITY_PROJECT_ID')
+  if (!dataset) missing.push('SANITY_DATASET or NEXT_PUBLIC_SANITY_DATASET')
   if (!token) missing.push('SANITY_TOKEN or SANITY_API_READ_TOKEN')
   if (!ingestSecret) missing.push('INGEST_SECRET or SANITY_PREVIEW_SECRET')
 
